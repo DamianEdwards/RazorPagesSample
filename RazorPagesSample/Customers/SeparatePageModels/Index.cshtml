@@ -1,0 +1,44 @@
+﻿@page {formaction?}/{id:int?}
+
+@model CustomersPageModel
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+<p>
+    <div asp-if="Model.ShowMessage" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+</p>
+<form method="post" asp-antiforgery="true">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(m => m.Customer.Id)</th>
+                <th>@Html.DisplayNameFor(m => m.Customer.Name)</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr asp-if="Model.Customers.Count == 0">
+                <td colspan="3">No customers yet.</td>
+            </tr>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(_ => customer.Id)</td>
+                    <td>@Html.DisplayFor(_ => @customer.Name)</td>
+                    <td>
+                        <a href="edit/@customer.Id" class="btn btn-xs btn-primary">edit</a>
+                        <button type="submit" formaction="delete/@customer.Id" class="btn btn-xs btn-danger">delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="new" class="btn btn-sm btn-success">Create</a>
+</form>
