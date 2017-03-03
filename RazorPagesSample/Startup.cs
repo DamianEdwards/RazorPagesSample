@@ -27,7 +27,7 @@ namespace RazorPages
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase());
+            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("name"));
             services.AddMvc().AddCookieTempDataProvider();
         }
 

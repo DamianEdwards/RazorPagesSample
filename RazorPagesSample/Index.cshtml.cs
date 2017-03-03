@@ -10,7 +10,7 @@ namespace RazorPages
     {
         public void OnGet()
         {
-            Message += $" Server time is { DateTime.Now.ToShortTimeString() }";
+            Message += $" Server time is { DateTime.Now.ToString() }";
         }
 
         public string Message { get; private set; } = "Hello from the page model!";

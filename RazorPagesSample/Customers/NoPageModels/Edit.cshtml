@@ -1,0 +1,68 @@
+﻿@page {id:int}
+
+@inject AppDbContext Db
+
+@functions {
+    public async Task<IActionResult> OnGetAsync(int id)
+    {
+        Customer = await Db.Customers.FindAsync(id);
+
+        if (Customer == null)
+        {
+            TempData["Message"] = $"Customer {id} not found!";
+            return Redirect("~/customers/nopagemodels/");
+        }
+
+        return View();
+    }
+
+    public async Task<IActionResult> OnPostAsync(Customer customer)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
+        Db.Attach(customer).State = EntityState.Modified;
+
+        try
+        {
+            await Db.SaveChangesAsync();
+            TempData["Message"] = "Customer updated successfully!";
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            TempData["Message"] = $"Customer {customer.Id} not found!";
+        }
+
+        return Redirect("~/customers/nopagemodels/");
+    }
+
+    public Customer Customer { get; private set; }
+}
+
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h1>Edit Customer - @Customer.Id</h1>
+<form method="post" class="form-horizontal" asp-antiforgery="true">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Customer.Id" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Customer.Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Customer.Name" class="form-control" />
+            <span asp-validation-for="Customer.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>  
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
+}

@@ -1,0 +1,47 @@
+﻿@page
+
+@inject AppDbContext Db
+
+@functions {
+    public async Task<IActionResult> OnPostAsync(Customer customer)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View();
+        }
+
+        Db.Customers.Add(customer);
+        await Db.SaveChangesAsync();
+
+        TempData["Message"] = "New customer created successfully!";
+
+        return Redirect("~/customers/nopagemodels/");
+    }
+
+    public Customer Customer { get; }
+}
+
+@{
+    ViewData["Title"] = "New Customer";
+}
+
+<h1>New Customer</h1>
+<form method="post" class="form-horizontal" asp-antiforgery="true">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Customer.Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Customer.Name" class="form-control" />
+            <span asp-validation-for="Customer.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>  
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
+}

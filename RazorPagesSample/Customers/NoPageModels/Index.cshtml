@@ -1,6 +1,39 @@
 ﻿@page {formaction?}/{id:int?}
 
-@model CustomersPageModel
+@inject AppDbContext Db
+
+@functions {
+    public async Task OnGetAsync()
+    {
+        Message = TempData["Message"]?.ToString();
+        Customers = await Db.Customers.AsNoTracking().ToListAsync();
+    }
+
+    public async Task<IActionResult> OnPostDeleteAsync(int id)
+    {
+        var customer = await Db.Customers.FindAsync(id);
+
+        if (customer != null)
+        {
+            Db.Customers.Remove(customer);
+            await Db.SaveChangesAsync();
+        }
+
+        TempData["Message"] = $"Customer {id} deleted successfully";
+        //Message = $"Customer {id} deleted successfully";
+
+        return Redirect("~/customers/nopagemodels/");
+    }
+
+    public Customer Customer { get; }
+
+    public IList<Customer> Customers { get; private set; }
+
+    [TempData]
+    public string Message { get; set; }
+
+    public bool ShowMessage => !string.IsNullOrEmpty(Message);
+}
 
 @{
     ViewData["Title"] = "Customers";
@@ -8,9 +41,9 @@
 
 <h1>Customers</h1>
 <p>
-    <div asp-if="Model.ShowMessage" class="alert alert-success alert-dismissible" role="alert">
+    <div asp-if="ShowMessage" class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        @Model.Message
+        @Message
     </div>
 </p>
 <form method="post" asp-antiforgery="true">
@@ -23,10 +56,9 @@
             </tr>
         </thead>
         <tbody>
-            <tr asp-if="Model.Customers.Count == 0">
                 <td colspan="3">No customers yet.</td>
             </tr>
-            @foreach (var customer in Model.Customers)
+            @foreach (var customer in Customers)
             {
                 <tr>
                     <td>@Html.DisplayFor(_ => customer.Id)</td>
