@@ -3,10 +3,12 @@
 @inject AppDbContext Db
 
 @functions {
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
         Message = TempData["Message"]?.ToString();
         Customers = await Db.Customers.AsNoTracking().ToListAsync();
+
+        return View();
     }
 
     public async Task<IActionResult> OnPostDeleteAsync(int id)
@@ -56,6 +58,7 @@
             </tr>
         </thead>
         <tbody>
+            <tr asp-if="Customers.Count == 0">
                 <td colspan="3">No customers yet.</td>
             </tr>
             @foreach (var customer in Customers)
