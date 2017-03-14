@@ -1,0 +1,89 @@
+﻿@page "{formaction?}/{id:int?}"
+
+@model IndexModel
+
+@functions {
+    public class IndexModel : PageModel
+    {
+        private readonly AppDbContext _db;
+
+        public IndexModel(AppDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            Message = TempData["Message"]?.ToString();
+            Customers = await _db.Customers.AsNoTracking().ToListAsync();
+
+            return View();
+        }
+
+        public async Task<IActionResult> OnPostDeleteAsync(int id)
+        {
+            var customer = await _db.Customers.FindAsync(id);
+
+            if (customer != null)
+            {
+                _db.Customers.Remove(customer);
+                await _db.SaveChangesAsync();
+            }
+
+            TempData["Message"] = $"Customer {id} deleted successfully";
+            //Message = $"Customer {id} deleted successfully";
+
+            return Redirect("~/customers/inlinepagemodels/");
+        }
+
+        public Customer Customer { get; }
+
+        public IList<Customer> Customers { get; private set; }
+
+        [TempData]
+        public string Message { get; set; }
+
+        public bool ShowMessage => !string.IsNullOrEmpty(Message);
+    }
+}
+
+@{
+    ViewData["Title"] = "Customers";
+}
+
+<h1>Customers</h1>
+<p>
+    <div asp-if="Model.ShowMessage" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Model.Message
+    </div>
+</p>
+<form method="post" asp-antiforgery="true">
+    <table class="table">
+        <thead>
+            <tr>
+                <th asp-display-name-for="Customer.Id"></th>
+                <th asp-display-name-for="Customer.Name"></th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr asp-if="Model.Customers.Count == 0">
+                <td colspan="3">No customers yet.</td>
+            </tr>
+            @foreach (var customer in Model.Customers)
+            {
+                <tr>
+                    <td asp-display-for="@customer.Id"></td>
+                    <td asp-display-for="@customer.Name"></td>
+                    <td>
+                        <a href="edit/@customer.Id" class="btn btn-xs btn-primary">edit</a>
+                        <button type="submit" formaction="delete/@customer.Id" class="btn btn-xs btn-danger">delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="new" class="btn btn-sm btn-success">Create</a>
+</form>

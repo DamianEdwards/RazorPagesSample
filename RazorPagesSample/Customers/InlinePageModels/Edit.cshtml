@@ -1,0 +1,78 @@
+﻿@page "{id:int}"
+
+@model EditModel
+
+@functions {
+    public class EditModel : PageModel
+    {
+        private readonly AppDbContext _db;
+
+        public EditModel(AppDbContext db)
+        {
+            _db = db;
+        }
+
+        public async Task<IActionResult> OnGetAsync(int id)
+        {
+            Customer = await _db.Customers.FindAsync(id);
+
+            if (Customer == null)
+            {
+                TempData["Message"] = $"Customer {id} not found!";
+                return Redirect("~/customers/inlinepagemodels/");
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> OnPostAsync(Customer customer)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+
+            _db.Attach(customer).State = EntityState.Modified;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+                TempData["Message"] = "Customer updated successfully!";
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                TempData["Message"] = $"Customer {customer.Id} not found!";
+            }
+
+            return Redirect("~/customers/inlinepagemodels/");
+        }
+
+        public Customer Customer { get; private set; }
+    }
+}
+
+@{
+    ViewData["Title"] = "Edit Customer";
+}
+
+<h1>Edit Customer - @Model.Customer.Id</h1>
+<form method="post" class="form-horizontal" asp-antiforgery="true">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <input asp-for="Customer.Id" type="hidden" />
+    <div class="form-group">
+        <label asp-for="Customer.Name" class="col-md-2 control-label"></label>
+        <div class="col-md-10">
+            <input asp-for="Customer.Name" class="form-control" />
+            <span asp-validation-for="Customer.Name" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>  
+</form>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
+    }
