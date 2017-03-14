@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -37,11 +36,10 @@ namespace RazorPages.Customers
             TempData[nameof(Message)] = $"Customer {id} deleted successfully";
             //Message = $"Customer {id} deleted successfully";
 
-            // IDEA: Have a convneience method for redirecting to yourself, e.g. Reload(), RedirectToSelf()
-            // IDEA: Need overloads of Redirect that take route name/arguments to redirect to manually routed pages
-            // IDEA: What can we do to make redirecting to other pages easier, without having to use URL?
-            //       e.g. RedirectToPage(pagePath: "Customers/SeparatePageModels/Index.cshtml", routeArgs, new { routeArg = 1 })
-            // IDEA: Trailing slash is important when redirecting/navigating to default document, we should automate somehow
+            // Tracking issues:
+            // https://github.com/aspnet/Mvc/issues/5953
+            // https://github.com/aspnet/Mvc/issues/5956
+            // https://github.com/aspnet/Mvc/issues/5955
             return Redirect("~/customers/separatepagemodels/");
         }
 
@@ -50,9 +48,8 @@ namespace RazorPages.Customers
 
         public IList<Customer> Customers { get; private set; }
 
-        // BUG: TempData attribute doesn't appear to be working
-        // IDEA: Allow specifying the key for TempData so that it can be easily mirrored across multiple PageModels,
-        //       e.g. when setting the message from the Edit page before redirecting back to the Index list.
+        // BUG: TempData attribute doesn't appear to be working yet
+        // Tracking issue: https://github.com/aspnet/Mvc/issues/5954
         [TempData]
         public string Message { get; set; }
 
