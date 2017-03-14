@@ -1,4 +1,4 @@
-﻿@page {formaction?}/{id:int?}
+﻿@page "{formaction?}/{id:int?}"
 
 @inject AppDbContext Db
 
@@ -52,8 +52,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(m => m.Customer.Id)</th>
-                <th>@Html.DisplayNameFor(m => m.Customer.Name)</th>
+                <th asp-display-name-for="Customer.Id"></th>
+                <th asp-display-name-for="Customer.Name"></th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -64,8 +64,8 @@
             @foreach (var customer in Customers)
             {
                 <tr>
-                    <td>@Html.DisplayFor(_ => customer.Id)</td>
-                    <td>@Html.DisplayFor(_ => customer.Name)</td>
+                    <td asp-display-for="@customer.Id"></td>
+                    <td asp-display-for="@customer.Name"></td>
                     <td>
                         <a href="edit/@customer.Id" class="btn btn-xs btn-primary">edit</a>
                         <button type="submit" formaction="delete/@customer.Id" class="btn btn-xs btn-danger">delete</button>

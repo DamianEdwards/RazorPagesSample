@@ -22,14 +22,15 @@ namespace RazorPagesSample.TagHelpers
         [HtmlAttributeName("asp-display-name-for")]
         public ModelExpression For { get; set; }
 
+        [HtmlAttributeNotBound]
         [ViewContext]
         public ViewContext ViewContext { get; set; }
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             ((IViewContextAware)_htmlHelper).Contextualize(ViewContext);
 
-
+            output.PostContent.AppendHtml(_htmlHelper.DisplayName(For.Metadata.PropertyName));
         }
     }
 }
