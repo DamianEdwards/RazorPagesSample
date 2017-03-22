@@ -1,0 +1,26 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RazorPagesWebApplication.Models
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form action="~/Account/Logout" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="~/Manage/" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a href="~/Account/Register">Register</a></li>
+        <li><a href="~/Account/Login">Log in</a></li>
+    </ul>
+}
