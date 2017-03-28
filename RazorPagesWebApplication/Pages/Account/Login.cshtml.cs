@@ -1,8 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Models;
@@ -14,14 +17,18 @@ namespace RazorPagesWebApplication.Pages.Account
         private readonly string _externalCookieScheme;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly IUrlHelperFactory _urlHelperFactory;
+        private IUrlHelper _url;
 
         public LoginModel(
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
+            IUrlHelperFactory urlHelperFactory,
             ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
+            _urlHelperFactory = urlHelperFactory;
             _logger = logger;
         }
 
@@ -39,6 +46,30 @@ namespace RazorPagesWebApplication.Pages.Account
         [ModelBinder]
         public bool RememberMe { get; set; }
 
+        // Bug: This should be on PageModel 
+        public IUrlHelper Url
+        {
+            get
+            {
+                if (_url == null)
+                {
+                    var factory = PageContext?.HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
+                    _url = factory?.GetUrlHelper(PageContext);
+                }
+
+                return _url;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+
+                _url = value;
+            }
+        }
+
         public async Task OnGet(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
@@ -54,11 +85,11 @@ namespace RazorPagesWebApplication.Pages.Account
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Email, Password, RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Email, Password, RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return Redirect(returnUrl);
+                    return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -78,6 +109,18 @@ namespace RazorPagesWebApplication.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return View();
+        }
+
+        private IActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return Redirect("~/");
+            }
         }
     }
 }

@@ -6,7 +6,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form action="~/Account/Logout" method="post" id="logoutForm" class="navbar-right">
+    <form action="~/Account/Logout" method="post" id="logoutForm" class="navbar-right" asp-antiforgery="true">
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <a href="~/Manage/" title="Manage">Hello @UserManager.GetUserName(User)!</a>

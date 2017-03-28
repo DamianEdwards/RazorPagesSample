@@ -253,12 +253,12 @@ namespace RazorPagesWebApplication.Controllers
 
         //
         // GET: /Account/ForgotPassword
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ForgotPassword()
+        //{
+        //    return View();
+        //}
 
         //
         // POST: /Account/ForgotPassword
@@ -300,12 +300,12 @@ namespace RazorPagesWebApplication.Controllers
 
         //
         // GET: /Account/ResetPassword
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult ResetPassword(string code = null)
-        {
-            return code == null ? View("Error") : View();
-        }
+        //[HttpGet]
+        //[AllowAnonymous]
+        //public IActionResult ResetPassword(string code = null)
+        //{
+        //    return code == null ? View("Error") : View();
+        //}
 
         //
         // POST: /Account/ResetPassword
