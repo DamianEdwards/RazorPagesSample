@@ -210,37 +210,37 @@ namespace RazorPagesWebApplication.Controllers
 
         //
         // GET: /Manage/ChangePassword
-        [HttpGet]
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
+        //[HttpGet]
+        //public IActionResult ChangePassword()
+        //{
+        //    return View();
+        //}
 
         //
         // POST: /Manage/ChangePassword
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var user = await GetCurrentUserAsync();
-            if (user != null)
-            {
-                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-                if (result.Succeeded)
-                {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User changed their password successfully.");
-                    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
-                }
-                AddErrors(result);
-                return View(model);
-            }
-            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View(model);
+        //    }
+        //    var user = await GetCurrentUserAsync();
+        //    if (user != null)
+        //    {
+        //        var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+        //        if (result.Succeeded)
+        //        {
+        //            await _signInManager.SignInAsync(user, isPersistent: false);
+        //            _logger.LogInformation(3, "User changed their password successfully.");
+        //            return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
+        //        }
+        //        AddErrors(result);
+        //        return View(model);
+        //    }
+        //    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
+        //}
 
         //
         // GET: /Manage/SetPassword
