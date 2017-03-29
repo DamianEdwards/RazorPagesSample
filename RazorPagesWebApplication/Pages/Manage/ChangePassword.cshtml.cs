@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using RazorPagesWebApplication.Models;
 
@@ -46,6 +47,9 @@ namespace RazorPagesWebApplication.Pages.Manage
         [ModelBinder]
         public string ConfirmPassword { get; set; }
 
+        [TempData]
+        public string StatusMessage { get; set; }
+
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -62,6 +66,8 @@ namespace RazorPagesWebApplication.Pages.Manage
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User changed their password successfully.");
+                    //StatusMessage = "Your password has been changed.";
+                    //return Redirect($"~/Manage/");
                     return Redirect($"~/Manage/?Message={ManageMessageId.ChangePasswordSuccess}");
                 }
                 foreach (var error in result.Errors)
@@ -70,6 +76,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 }
                 return View();
             }
+
             return Redirect($"~/Manage/?Message={ManageMessageId.Error}");
         }
     }

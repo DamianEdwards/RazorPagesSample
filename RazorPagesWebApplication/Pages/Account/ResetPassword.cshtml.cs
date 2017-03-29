@@ -11,7 +11,14 @@ namespace RazorPagesWebApplication.Pages.Account
     {
         public IActionResult OnGet(string code = null)
         {
-            return code == null ? Redirect("~/Error") : View();
+            if (code == null)
+            {
+                return Redirect("~/Error");
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }

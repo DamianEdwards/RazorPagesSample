@@ -44,29 +44,29 @@ namespace RazorPagesWebApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+            //ViewData["StatusMessage"] =
+            //    message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+            //    : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+            //    : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+            //    : message == ManageMessageId.Error ? "An error has occurred."
+            //    : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+            //    : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+            //    : "";
 
-            var user = await GetCurrentUserAsync();
-            if (user == null)
-            {
-                return View("Error");
-            }
-            var model = new IndexViewModel
-            {
-                HasPassword = await _userManager.HasPasswordAsync(user),
-                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
-            };
-            return View(model);
+            //var user = await GetCurrentUserAsync();
+            //if (user == null)
+            //{
+            //    return View("Error");
+            //}
+            //var model = new IndexViewModel
+            //{
+            //    HasPassword = await _userManager.HasPasswordAsync(user),
+            //    PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
+            //    TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
+            //    Logins = await _userManager.GetLoginsAsync(user),
+            //    BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+            //};
+            return View();
         }
 
         //
