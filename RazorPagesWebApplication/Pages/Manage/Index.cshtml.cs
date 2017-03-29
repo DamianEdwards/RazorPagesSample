@@ -64,7 +64,7 @@ namespace RazorPagesWebApplication.Pages.Manage
 
         private Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return _userManager.GetUserAsync(PageContext.HttpContext.User);
+            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

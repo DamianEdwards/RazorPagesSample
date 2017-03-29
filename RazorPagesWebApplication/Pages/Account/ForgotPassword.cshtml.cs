@@ -32,7 +32,7 @@ namespace RazorPagesWebApplication.Pages.Account
             {
                 if (_url == null)
                 {
-                    var factory = PageContext?.HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
+                    var factory = HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
                     _url = factory?.GetUrlHelper(PageContext);
                 }
 

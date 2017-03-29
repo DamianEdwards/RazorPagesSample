@@ -6,33 +6,22 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.Extensions.Logging;
 using RazorPagesWebApplication.Models;
 
 namespace RazorPagesWebApplication.Pages.Manage
 {
-    public class ChangePasswordModel : PageModel
+    public class SetPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<ChangePasswordModel> _logger;
 
-        public ChangePasswordModel(
+        public SetPasswordModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            ILogger<ChangePasswordModel> logger)
+            SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _logger = logger;
         }
-
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "Current password")]
-        [ModelBinder]
-        public string OldPassword { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -47,9 +36,6 @@ namespace RazorPagesWebApplication.Pages.Manage
         [ModelBinder]
         public string ConfirmPassword { get; set; }
 
-        [TempData]
-        public string StatusMessage { get; set; }
-
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
@@ -58,17 +44,13 @@ namespace RazorPagesWebApplication.Pages.Manage
             }
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
-
             if (user != null)
             {
-                var result = await _userManager.ChangePasswordAsync(user, OldPassword, NewPassword);
+                var result = await _userManager.AddPasswordAsync(user, NewPassword);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "User changed their password successfully.");
-                    StatusMessage = "Your password has been changed.";
-                    //return Redirect($"~/Manage/");
-                    return Redirect($"~/Manage/?Message={ManageMessageId.ChangePasswordSuccess}");
+                    return Redirect($"~/Manage/SetPassword?Message={ManageMessageId.SetPasswordSuccess}");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -77,7 +59,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return Redirect($"~/Manage/?Message={ManageMessageId.Error}");
+            return Redirect($"~/Manage/SetPassword?Message={ManageMessageId.Error}");
         }
     }
 }

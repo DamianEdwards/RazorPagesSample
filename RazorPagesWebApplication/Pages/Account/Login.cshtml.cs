@@ -53,7 +53,7 @@ namespace RazorPagesWebApplication.Pages.Account
             {
                 if (_url == null)
                 {
-                    var factory = PageContext?.HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
+                    var factory = HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
                     _url = factory?.GetUrlHelper(PageContext);
                 }
 
@@ -73,7 +73,7 @@ namespace RazorPagesWebApplication.Pages.Account
         public async Task OnGet(string returnUrl = null)
         {
             // Clear the existing external cookie to ensure a clean login process
-            await PageContext.HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             ViewData["ReturnUrl"] = returnUrl;
         }
