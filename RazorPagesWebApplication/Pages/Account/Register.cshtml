@@ -6,7 +6,7 @@
 
 <h2>@ViewData["Title"].</h2>
 
-<form action="?ReturnUrl=@ViewData["ReturnUrl"]" method="post" class="form-horizontal" asp-antiforgery="true">
+<form action="~/Account/Register?ReturnUrl=@ViewData["ReturnUrl"]" method="post" class="form-horizontal" asp-antiforgery="true">
     <h4>Create a new account.</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>
