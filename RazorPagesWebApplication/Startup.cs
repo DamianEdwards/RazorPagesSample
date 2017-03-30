@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +48,12 @@ namespace RazorPagesWebApplication
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddMvc().AddRazorPagesOptions(options => options.RootDirectory = "/Pages");
+            services.AddMvc(options =>
+            {
+                options.SslPort = 44335;
+                options.Filters.Add(new RequireHttpsAttribute());
+            })
+            .AddRazorPagesOptions(options => options.RootDirectory = "/Pages");
  
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -75,6 +81,11 @@ namespace RazorPagesWebApplication
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
+            app.UseGoogleAuthentication(new GoogleOptions
+            {
+                ClientId = Configuration["Authentication:Google:ClientId"],
+                ClientSecret = Configuration["Authentication:Google:ClientSecret"]
+            });
 
             app.UseMvc(routes =>
             {

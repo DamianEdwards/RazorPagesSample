@@ -2,7 +2,7 @@
 @using System.Collections.Generic
 @using Microsoft.AspNetCore.Http
 @using Microsoft.AspNetCore.Http.Authentication
-@model LoginModel
+@model RazorPagesWebApplication.Pages.Account.LoginModel
 @inject SignInManager<ApplicationUser> SignInManager
 
 @{
@@ -72,12 +72,12 @@
                 }
                 else
                 {
-                    <form method="post" class="form-horizontal">
+                    <form action="ExternalLogin?ReturnUrl=@ViewData["ReturnUrl"]" method="post" class="form-horizontal" asp-antiforgery="true">
                         <div>
                             <p>
                                 @foreach (var provider in loginProviders)
                                 {
-                                    <button formaction="ExternalLogin?ReturnUrl=@ViewData["ReturnUrl"]" type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
+                                    <button type="submit" class="btn btn-default" name="provider" value="@provider.AuthenticationScheme" title="Log in using your @provider.DisplayName account">@provider.AuthenticationScheme</button>
                                 }
                             </p>
                         </div>

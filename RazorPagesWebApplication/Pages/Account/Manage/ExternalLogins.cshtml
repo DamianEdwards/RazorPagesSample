@@ -1,5 +1,5 @@
 ﻿@page "{formaction?}"
-@model RazorPagesWebApplication.Pages.Manage.ManageLoginsModel
+@model RazorPagesWebApplication.Pages.Manage.ExternalLoginsModel
 @using Microsoft.AspNetCore.Http.Authentication
 @{
     ViewData["Title"] = "Manage your external logins";
@@ -19,9 +19,9 @@
                 <tr>
                     <td>@login.LoginProvider</td>
                     <td>
-                        @if ((bool)ViewData["ShowRemoveButton"])
+                        @if (Model.ShowRemoveButton)
                         {
-                            <form action="RemoveLogin" method="post" class="form-horizontal" asp-antiforgery="true">
+                            <form action="~/Account/Manage/ExternalLogins/RemoveLogin" method="post" class="form-horizontal" asp-antiforgery="true">
                                 <div>
                                     <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
                                     <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
@@ -43,7 +43,7 @@
 {
     <h4>Add another service to log in.</h4>
     <hr />
-    <form action="LinkLogin" method="post" class="form-horizontal" asp-antiforgery="true">
+    <form action="~/Account/Manage/ExternalLogins/LinkLogin" method="post" class="form-horizontal" asp-antiforgery="true">
         <div id="socialLoginList">
             <p>
                 @foreach (var provider in Model.OtherLogins)

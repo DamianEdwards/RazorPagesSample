@@ -47,7 +47,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
-            var user = await GetCurrentUserAsync();
+            var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
                 return Redirect("~/Error");
@@ -60,11 +60,6 @@ namespace RazorPagesWebApplication.Pages.Manage
             BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
 
             return View();
-        }
-
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }

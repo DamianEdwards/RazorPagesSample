@@ -276,7 +276,7 @@ namespace RazorPagesWebApplication.Controllers
         //    return RedirectToAction(nameof(Index), new { Message = ManageMessageId.Error });
         //}
 
-        //GET: /Manage/ManageLogins
+        //GET: /Manage/Logins
         //[HttpGet]
         //public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         //{

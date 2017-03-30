@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +18,14 @@ namespace RazorPagesWebApplication.Pages.Account
         private readonly string _externalCookieScheme;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
-        private readonly IUrlHelperFactory _urlHelperFactory;
-        private IUrlHelper _url;
 
         public LoginModel(
             SignInManager<ApplicationUser> signInManager,
             IOptions<IdentityCookieOptions> identityCookieOptions,
-            IUrlHelperFactory urlHelperFactory,
             ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
-            _urlHelperFactory = urlHelperFactory;
             _logger = logger;
         }
 
@@ -46,32 +43,14 @@ namespace RazorPagesWebApplication.Pages.Account
         [ModelBinder]
         public bool RememberMe { get; set; }
 
-        // Bug: This should be on PageModel 
-        public IUrlHelper Url
-        {
-            get
-            {
-                if (_url == null)
-                {
-                    var factory = HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
-                    _url = factory?.GetUrlHelper(PageContext);
-                }
-
-                return _url;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                _url = value;
-            }
-        }
-
         public async Task OnGet(string returnUrl = null)
         {
+            var errorMessage = (string)TempData["ErrorMessage"];
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                ModelState.AddModelError(string.Empty, errorMessage);
+            }
+
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
