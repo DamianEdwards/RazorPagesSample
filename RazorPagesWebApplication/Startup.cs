@@ -54,8 +54,9 @@ namespace RazorPagesWebApplication
                 options.Filters.Add(new RequireHttpsAttribute());
             })
             .AddRazorPagesOptions(options => options.RootDirectory = "/Pages");
- 
+
             // Add application services.
+            services.Configure<SendGridOptions>(Configuration.GetSection("SendGridOptions"));
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
         }

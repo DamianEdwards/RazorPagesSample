@@ -5,49 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.DependencyInjection;
 using RazorPagesWebApplication.Models;
+using RazorPagesWebApplication.Services;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private IUrlHelper _url;
+        private readonly IEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<ApplicationUser> userManager)
+        public ForgotPasswordModel(
+            UserManager<ApplicationUser> userManager,
+            IEmailSender emailSender)
         {
             _userManager = userManager;
+            _emailSender = emailSender;
         }
 
         [Required]
         [EmailAddress]
         [ModelBinder]
         public string Email { get; set; }
-
-        public IUrlHelper Url
-        {
-            get
-            {
-                if (_url == null)
-                {
-                    var factory = HttpContext?.RequestServices?.GetRequiredService<IUrlHelperFactory>();
-                    _url = factory?.GetUrlHelper(PageContext);
-                }
-
-                return _url;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-
-                _url = value;
-            }
-        }
 
         public async Task<IActionResult> OnPostAsync()
         {
@@ -62,11 +41,11 @@ namespace RazorPagesWebApplication.Pages.Account
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                 // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action(nameof(ResetPassword), "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                //return Redirect("~/Account/ForgotPasswordConfirmation");
+                var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var callbackUrl = Url.RouteUrl(null, new { page = "/Account/ResetPassword", userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                await _emailSender.SendEmailAsync(Email, "Reset Password",
+                   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+                return Redirect("~/Account/ForgotPasswordConfirmation");
             }
 
             // If we got this far, something failed, redisplay form

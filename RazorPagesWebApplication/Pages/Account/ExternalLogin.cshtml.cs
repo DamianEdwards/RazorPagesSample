@@ -48,7 +48,7 @@ namespace RazorPagesWebApplication.Pages.Account
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Content("~/Account/ExternalLogin/Callback");
+            var redirectUrl = Url.RouteUrl(null, new { page = "/Account/ExternalLogin/Callback" });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properties);
         }

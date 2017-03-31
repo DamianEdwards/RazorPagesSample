@@ -2,18 +2,33 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace RazorPagesWebApplication.Services
 {
-    // This class is used by the application to send Email and SMS
-    // when you turn on two-factor authentication in ASP.NET Identity.
-    // For more details see this link https://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        public AuthMessageSender(IOptions<SendGridOptions> options)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            Options = options.Value;
+        }
+
+        public SendGridOptions Options { get; }
+
+        public async Task SendEmailAsync(string email, string subject, string message)
+        {
+            var client = new SendGridClient(Options.SendGridKey);
+            var msg = new SendGridMessage
+            {
+                From = new EmailAddress("no-reply@razorpages.asp.net", "Razor Pages"),
+                Subject = subject,
+                PlainTextContent = message,
+                HtmlContent = message
+            };
+            msg.AddTo(new EmailAddress(email));
+            var result = await client.SendEmailAsync(msg);
         }
 
         public Task SendSmsAsync(string number, string message)

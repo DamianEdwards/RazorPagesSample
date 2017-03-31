@@ -85,7 +85,7 @@ namespace RazorPagesWebApplication.Pages.Manage
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.Content("~/Account/Manage/ExternalLogins/LinkLoginCallback");
+            var redirectUrl = Url.RouteUrl(null, new { page = "/Account/Manage/ExternalLogins/LinkLoginCallback" });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(HttpContext.User));
             return new ChallengeResult(provider, properties);
         }

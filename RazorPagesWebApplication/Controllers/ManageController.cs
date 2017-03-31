@@ -42,7 +42,7 @@ namespace RazorPagesWebApplication.Controllers
         //
         // GET: /Manage/Index
         [HttpGet]
-        public async Task<IActionResult> Index(ManageMessageId? message = null)
+        public IActionResult Index(ManageMessageId? message = null)
         {
             //ViewData["StatusMessage"] =
             //    message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
