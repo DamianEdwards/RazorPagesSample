@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using RazorPagesWebApplication.Models;
+using RazorPagesWebApplication.Data;
 
 namespace RazorPagesWebApplication.Pages.Manage
 {

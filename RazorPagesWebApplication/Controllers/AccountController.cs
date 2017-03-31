@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RazorPagesWebApplication.Models;
+using RazorPagesWebApplication.Data;
 using RazorPagesWebApplication.Models.AccountViewModels;
 using RazorPagesWebApplication.Services;
 

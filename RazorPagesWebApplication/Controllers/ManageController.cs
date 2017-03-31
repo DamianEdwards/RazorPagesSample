@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RazorPagesWebApplication.Models;
+using RazorPagesWebApplication.Data;
 using RazorPagesWebApplication.Models.ManageViewModels;
 using RazorPagesWebApplication.Services;
 

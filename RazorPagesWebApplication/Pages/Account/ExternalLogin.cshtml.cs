@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using RazorPagesWebApplication.Models;
+using RazorPagesWebApplication.Data;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
