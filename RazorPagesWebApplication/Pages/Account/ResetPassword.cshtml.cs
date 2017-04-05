@@ -43,7 +43,7 @@ namespace RazorPagesWebApplication.Pages.Account
         {
             if (code == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
             else
             {
@@ -63,13 +63,13 @@ namespace RazorPagesWebApplication.Pages.Account
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return Redirect("~/Account/ResetPasswordConfirmation");
+                return RedirectToPage("/Account/ResetPasswordConfirmation");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Code, Password);
             if (result.Succeeded)
             {
-                return Redirect("~/Account/ResetPasswordConfirmation");
+                return RedirectToPage("/Account/ResetPasswordConfirmation");
             }
 
             foreach (var error in result.Errors)

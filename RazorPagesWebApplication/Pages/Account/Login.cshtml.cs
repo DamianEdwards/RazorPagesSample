@@ -41,6 +41,8 @@ namespace RazorPagesWebApplication.Pages.Account
         [ModelBinder]
         public bool RememberMe { get; set; }
 
+        public string ReturnUrl { get; set; }
+
         public async Task OnGet(string returnUrl = null)
         {
             var errorMessage = (string)TempData["ErrorMessage"];
@@ -52,12 +54,13 @@ namespace RazorPagesWebApplication.Pages.Account
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
-            ViewData["ReturnUrl"] = returnUrl;
+            ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ReturnUrl = returnUrl;
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -70,12 +73,12 @@ namespace RazorPagesWebApplication.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return Redirect($"~/Account/SendCode?ReturnUrl={returnUrl}&RememberMe={RememberMe}");
+                    return RedirectToPage("/Account/SendCode", new { returnUrl, RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
-                    return Redirect("~/Account/Lockout");
+                    return RedirectToPage("/Account/Lockout");
                 }
                 else
                 {

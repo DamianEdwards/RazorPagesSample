@@ -1,5 +1,4 @@
-﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,7 +15,6 @@
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
-    @Html.Raw(JavaScriptSnippet.FullScript)
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -28,13 +26,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="~/" class="navbar-brand">RazorPagesWebApplication</a>
+                <a asp-route-page="/Index" class="navbar-brand">RazorPagesWebApplication</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="~/">Home</a></li>
-                    <li><a href="~/About">About</a></li>
-                    <li><a href="~/Contact">Contact</a></li>
+                    <li><a asp-route-page="/Index">Home</a></li>
+                    <li><a asp-route-page="/About">About</a></li>
+                    <li><a asp-route-page="/Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("~/Pages/_LoginPartial.cshtml")
             </div>

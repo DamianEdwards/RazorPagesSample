@@ -1,15 +1,15 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using RazorPagesWebApplication.Models
+@using RazorPagesWebApplication.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
-    <form action="~/Account/Logout" method="post" id="logoutForm" class="navbar-right" asp-antiforgery="true">
+    <form asp-route-page="/Account/Logout" method="post" id="logoutForm" class="navbar-right" asp-antiforgery="true">
         <ul class="nav navbar-nav navbar-right">
             <li>
-                <a href="~/Account/Manage/" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <a asp-route-page="/Account/Manage/" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
@@ -20,7 +20,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a href="~/Account/Register">Register</a></li>
-        <li><a href="~/Account/Login">Log in</a></li>
+        <li><a asp-route-page="/Account/Register">Register</a></li>
+        <li><a asp-route-page="/Account/Login">Log in</a></li>
     </ul>
 }

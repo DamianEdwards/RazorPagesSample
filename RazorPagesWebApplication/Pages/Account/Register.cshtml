@@ -1,12 +1,12 @@
 ﻿@page
-@model RegisterModel
+@model RazorPagesWebApplication.Pages.Account.RegisterModel
 @{
     ViewData["Title"] = "Register";
 }
 
 <h2>@ViewData["Title"].</h2>
 
-<form action="~/Account/Register?ReturnUrl=@ViewData["ReturnUrl"]" method="post" class="form-horizontal" asp-antiforgery="true">
+<form asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal" >
     <h4>Create a new account.</h4>
     <hr />
     <div asp-validation-summary="All" class="text-danger"></div>

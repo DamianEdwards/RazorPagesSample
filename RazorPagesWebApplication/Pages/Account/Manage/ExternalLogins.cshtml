@@ -21,7 +21,7 @@
                     <td>
                         @if (Model.ShowRemoveButton)
                         {
-                            <form action="~/Account/Manage/ExternalLogins/RemoveLogin" method="post" class="form-horizontal" asp-antiforgery="true">
+                            <form asp-route-formaction="RemoveLogin" method="post" class="form-horizontal">
                                 <div>
                                     <input asp-for="@login.LoginProvider" name="LoginProvider" type="hidden" />
                                     <input asp-for="@login.ProviderKey" name="ProviderKey" type="hidden" />
@@ -43,7 +43,7 @@
 {
     <h4>Add another service to log in.</h4>
     <hr />
-    <form action="~/Account/Manage/ExternalLogins/LinkLogin" method="post" class="form-horizontal" asp-antiforgery="true">
+    <form asp-route-formaction="LinkLogin" method="post" class="form-horizontal">
         <div id="socialLoginList">
             <p>
                 @foreach (var provider in Model.OtherLogins)

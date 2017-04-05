@@ -38,6 +38,7 @@ namespace RazorPagesWebApplication.Pages.Manage
 
         public async Task<IActionResult> OnGetAsync(ManageMessageId? message = null)
         {
+            // TODO: Replace all this with StatusMessage property when TempData attribute works
             ViewData["StatusMessage"] =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -50,7 +51,7 @@ namespace RazorPagesWebApplication.Pages.Manage
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             HasPassword = await _userManager.HasPasswordAsync(user);

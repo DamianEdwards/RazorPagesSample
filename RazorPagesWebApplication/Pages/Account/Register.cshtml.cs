@@ -53,14 +53,16 @@ namespace RazorPagesWebApplication.Pages.Account
         [ModelBinder]
         public string ConfirmPassword { get; set; }
 
+        public string ReturnUrl { get; set; }
+
         public void OnGet(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ReturnUrl = returnUrl;
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            ViewData["ReturnUrl"] = returnUrl;
+            ReturnUrl = returnUrl;
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = Email, Email = Email };
@@ -75,21 +77,18 @@ namespace RazorPagesWebApplication.Pages.Account
                         $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    // BUG: Redirectig to the returnUrl is wrong here as the user isn't signed in until they verify their email address.
+                    //      There should probably be a register confirmation page for cases when further verification has been requested.
                     return RedirectToLocal(returnUrl);
                 }
-                AddErrors(result);
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
             // If we got this far, something failed, redisplay form
             return View();
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(string.Empty, error.Description);
-            }
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

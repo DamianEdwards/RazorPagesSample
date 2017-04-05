@@ -39,6 +39,7 @@ namespace RazorPagesWebApplication.Pages.Manage
 
         public async Task<IActionResult> OnGet(ManageMessageId? message = null)
         {
+            // TODO: Replace all this with StatusMessage when TempData attribute works
             ViewData["StatusMessage"] =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
@@ -49,7 +50,7 @@ namespace RazorPagesWebApplication.Pages.Manage
 
             if (user == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
@@ -75,8 +76,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 }
             }
             StatusMessage = "The external login was removed.";
-            //return Redirect("~/Account/Manage/ExternalLogins");
-            return Redirect($"~/Account/Manage/ExternalLogins/?Message={message}");
+            return RedirectToPage("/Account/Manage/ExternalLogins", new { message });
         }
 
         public async Task<IActionResult> OnPostLinkLogin(string provider)
@@ -85,7 +85,7 @@ namespace RazorPagesWebApplication.Pages.Manage
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.RouteUrl(null, new { page = "/Account/Manage/ExternalLogins/LinkLoginCallback" });
+            var redirectUrl = Url.RouteUrl(null, new { page = "/Account/Manage/ExternalLogins", formaction = "LinkLoginCallback" });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(HttpContext.User));
             return new ChallengeResult(provider, properties);
         }
@@ -95,25 +95,25 @@ namespace RazorPagesWebApplication.Pages.Manage
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
             if (info == null)
             {
-                return Redirect($"~/Account/Manage/ExternalLogins/?Message={ManageMessageId.Error}");
+                return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.Error });
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                return Redirect($"~/Account/Manage/ExternalLogins/?Message={ManageMessageId.Error}");
+                return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.Error });
             }
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
-            return Redirect($"~/Account/Manage/ExternalLogins/?Message={ManageMessageId.AddLoginSuccess}");
+            return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.AddLoginSuccess });
         }
     }
 }

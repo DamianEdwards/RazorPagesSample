@@ -68,7 +68,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                     _logger.LogInformation(3, "User changed their password successfully.");
                     StatusMessage = "Your password has been changed.";
                     //return Redirect($"~/Account/Manage/");
-                    return Redirect($"~/Account/Manage/?Message={ManageMessageId.ChangePasswordSuccess}");
+                    return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.ChangePasswordSuccess });
                 }
                 foreach (var error in result.Errors)
                 {
@@ -77,7 +77,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return Redirect($"~/Account/Manage/?Message={ManageMessageId.Error}");
+            return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.Error });
         }
     }
 }

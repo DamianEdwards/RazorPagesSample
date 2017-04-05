@@ -36,19 +36,21 @@ namespace RazorPagesWebApplication.Pages.Manage
         [ModelBinder]
         public string ConfirmPassword { get; set; }
 
+        public string ReturnUrl { get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             var hasPassword = await _userManager.HasPasswordAsync(user);
 
             if (hasPassword)
             {
-                return Redirect("~/Account/Manage/ChangePassword");
+                return RedirectToPage("/Account/Manage/ChangePassword");
             }
 
             return View();
@@ -68,7 +70,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return Redirect($"~/Account/Manage/?Message={ManageMessageId.SetPasswordSuccess}");
+                    return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.SetPasswordSuccess });
                 }
                 foreach (var error in result.Errors)
                 {
@@ -77,7 +79,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return Redirect($"~/Account/Manage/?Message={ManageMessageId.Error}");
+            return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.Error });
         }
     }
 }
