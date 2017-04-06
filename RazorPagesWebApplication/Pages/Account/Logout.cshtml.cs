@@ -25,7 +25,7 @@ namespace RazorPagesWebApplication.Pages.Account
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation(4, "User logged out.");
-            return Redirect("~/");
+            return RedirectToPage("/Index");
         }
     }
 }

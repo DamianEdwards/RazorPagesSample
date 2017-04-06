@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
-    public class ForgotPasswordConfirmation : PageModel
+    public class ExternalLoginFailureModel : PageModel
     {
         public void OnGet()
         {

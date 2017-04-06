@@ -36,7 +36,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
                     // Don't reveal that the user does not exist or is not confirmed
-                    return Redirect("~/Account/ForgotPasswordConfirmation");
+                    return RedirectToPage("/Account/ForgotPasswordConfirmation");
                 }
 
                 // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
@@ -45,7 +45,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 var callbackUrl = Url.RouteUrl(null, new { page = "/Account/ResetPassword", userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                 await _emailSender.SendEmailAsync(Email, "Reset Password",
                    $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                return Redirect("~/Account/ForgotPasswordConfirmation");
+                return RedirectToPage("/Account/ForgotPasswordConfirmation");
             }
 
             // If we got this far, something failed, redisplay form

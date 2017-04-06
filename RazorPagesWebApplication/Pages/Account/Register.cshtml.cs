@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Data;
@@ -14,11 +16,11 @@ namespace RazorPagesWebApplication.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly string _externalCookieScheme;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly string _externalCookieScheme;
+        private readonly ILogger<LoginModel> _logger;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -73,8 +75,10 @@ namespace RazorPagesWebApplication.Pages.Account
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var callbackUrl = Url.RouteUrl(null, new { page = "/Account/ConfirmEmail", userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    // HACK: Having the email body be a string in the code isn't great, we should look at making this a separate .html file,
+                    //       or even a protected Razor Page that accepts the UserId so that it can have a model, be templated, etc. It could be read once and cached.
                     await _emailSender.SendEmailAsync(Email, "Confirm your account",
-                        $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+                        $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>link</a>");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     // BUG: Redirectig to the returnUrl is wrong here as the user isn't signed in until they verify their email address.
@@ -99,7 +103,7 @@ namespace RazorPagesWebApplication.Pages.Account
             }
             else
             {
-                return Redirect("~/");
+                return RedirectToPage("/Index");
             }
         }
     }

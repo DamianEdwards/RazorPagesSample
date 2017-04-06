@@ -66,6 +66,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(Email, Password, RememberMe, lockoutOnFailure: true);
+                // BUG: This shouldn't allow login if email still requires verification
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
@@ -99,7 +100,7 @@ namespace RazorPagesWebApplication.Pages.Account
             }
             else
             {
-                return Redirect("~/");
+                return RedirectToPage("/Index");
             }
         }
     }

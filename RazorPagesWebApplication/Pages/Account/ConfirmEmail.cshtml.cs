@@ -22,19 +22,19 @@ namespace RazorPagesWebApplication.Pages.Account
         {
             if (userId == null || code == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (!result.Succeeded)
             {
-                return Redirect("~/Error");
+                return RedirectToPage("/Error");
             }
 
             return View();

@@ -133,7 +133,7 @@ namespace RazorPagesWebApplication.Pages.Account
             }
             else
             {
-                return Redirect("~/");
+                return RedirectToPage("/Index");
             }
         }
     }
