@@ -113,6 +113,7 @@ namespace RazorPagesWebApplication.Pages.Manage
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
+            var url = Url.Page("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.AddLoginSuccess });
             return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.AddLoginSuccess });
         }
     }

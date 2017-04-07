@@ -49,16 +49,16 @@ namespace RazorPagesWebApplication
                 .AddDefaultTokenProviders();
 
             services.AddMvc(options =>
-            {
-                options.SslPort = 44335;
-                options.Filters.Add(new RequireHttpsAttribute());
-            })
-            .AddRazorPagesOptions(options =>
-            {
-                options.RootDirectory = "/Pages";
-                options.AuthorizeFolder("/Account/Manage");
-                options.AuthorizePage("/Account/Logout");
-            });
+                {
+                    options.SslPort = 44335;
+                    options.Filters.Add(new RequireHttpsAttribute());
+                })
+                .AddRazorPagesOptions(options =>
+                {
+                    options.RootDirectory = "/Pages";
+                    options.AuthorizeFolder("/Account/Manage/Index");
+                    options.AuthorizePage("/Account/Logout");
+                });
 
             // Add application services.
             services.Configure<SendGridOptions>(Configuration.GetSection("SendGridOptions"));

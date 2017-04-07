@@ -70,7 +70,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.SetPasswordSuccess });
+                    return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.SetPasswordSuccess });
                 }
                 foreach (var error in result.Errors)
                 {
@@ -79,7 +79,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return RedirectToPage("/Account/Manage", new { Message = ManageMessageId.Error });
+            return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.Error });
         }
     }
 }
