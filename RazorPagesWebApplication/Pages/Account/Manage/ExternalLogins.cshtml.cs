@@ -76,7 +76,7 @@ namespace RazorPagesWebApplication.Pages.Manage
                 }
             }
             StatusMessage = "The external login was removed.";
-            return RedirectToPage("/Account/Manage/ExternalLogins", new { message });
+            return RedirectToPage(new { formaction = "", message });
         }
 
         public async Task<IActionResult> OnPostLinkLogin(string provider)
@@ -85,7 +85,7 @@ namespace RazorPagesWebApplication.Pages.Manage
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
 
             // Request a redirect to the external login provider to link a login for the current user
-            var redirectUrl = Url.RouteUrl(null, new { page = "/Account/Manage/ExternalLogins", formaction = "LinkLoginCallback" });
+            var redirectUrl = Url.Page("/Account/Manage/ExternalLogins", new { formaction = "LinkLoginCallback" });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(HttpContext.User));
             return new ChallengeResult(provider, properties);
         }
@@ -101,20 +101,19 @@ namespace RazorPagesWebApplication.Pages.Manage
             var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
             if (info == null)
             {
-                return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.Error });
+                return RedirectToPage(new { formaction = "", Message = ManageMessageId.Error });
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.Error });
+                return RedirectToPage(new { formaction = "", Message = ManageMessageId.Error });
             }
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
-
-            var url = Url.Page("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.AddLoginSuccess });
-            return RedirectToPage("/Account/Manage/ExternalLogins", new { Message = ManageMessageId.AddLoginSuccess });
+            
+            return RedirectToPage(new { formaction = "", Message = ManageMessageId.AddLoginSuccess });
         }
     }
 }

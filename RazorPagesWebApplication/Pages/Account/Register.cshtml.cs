@@ -73,7 +73,7 @@ namespace RazorPagesWebApplication.Pages.Account
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.RouteUrl(null, new { page = "/Account/ConfirmEmail", userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    var callbackUrl = Url.Page("/Account/ConfirmEmail", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     // HACK: Having the email body be a string in the code isn't great, we should look at making this a separate .html file,
                     //       or even a protected Razor Page that accepts the UserId so that it can have a model, be templated, etc. It could be read once and cached.
                     await _emailSender.SendEmailAsync(Email, "Confirm your account",
