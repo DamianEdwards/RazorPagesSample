@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using RazorPagesWebApplication.Data;
 
 namespace RazorPagesWebApplication.Pages.Manage
@@ -37,6 +38,9 @@ namespace RazorPagesWebApplication.Pages.Manage
         public string ConfirmPassword { get; set; }
 
         public string ReturnUrl { get; set; }
+
+        [TempData]
+        public string StatusMessage { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -70,7 +74,9 @@ namespace RazorPagesWebApplication.Pages.Manage
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.SetPasswordSuccess });
+                    StatusMessage = "Your password has been set.";
+                    TempData["StatusMessage"] = "Your password has been set.";
+                    return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.SetPasswordSuccess }*/);
                 }
                 foreach (var error in result.Errors)
                 {
@@ -79,7 +85,9 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.Error });
+            StatusMessage = "An error has occurred.";
+            TempData["StatusMessage"] = "An error has occurred.";
+            return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.Error }*/);
         }
     }
 }

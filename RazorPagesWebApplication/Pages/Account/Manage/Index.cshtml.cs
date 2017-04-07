@@ -36,17 +36,21 @@ namespace RazorPagesWebApplication.Pages.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync(ManageMessageId? message = null)
+        public string StatusMessageClass => StatusMessage.IndexOf("error", StringComparison.OrdinalIgnoreCase) >= 0 ? "error" : "success";
+
+        public bool ShowStatusMessage => !string.IsNullOrEmpty((string)ViewData["StatusMessasge"]);
+
+        public async Task<IActionResult> OnGetAsync(/*ManageMessageId? message = null*/)
         {
             // TODO: Replace all this with StatusMessage property when TempData attribute works
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
-                : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
-                : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
-                : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
-                : "";
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
+                //message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                //: message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
+                //: message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
+                //: message == ManageMessageId.Error ? "An error has occurred."
+                //: message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
+                //: message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                //: "";
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)

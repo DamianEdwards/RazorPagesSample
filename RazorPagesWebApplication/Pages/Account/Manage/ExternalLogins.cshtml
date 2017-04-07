@@ -7,8 +7,14 @@
 
 <h2>@ViewData["Title"].</h2>
 
-<p class="text-success">@ViewData["StatusMessage"]</p>
-@*<p class="text-success">@Model.StatusMessage</p>*@
+@if (Model.ShowStatusMessage)
+{
+    <div class="alert alert-@Model.StatusMessageClass alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @*@Model.StatusMessage*@
+        @ViewData["StatusMessage"]
+    </div>
+}
 @if (Model.CurrentLogins.Count > 0)
 {
     <h4>Registered Logins</h4>

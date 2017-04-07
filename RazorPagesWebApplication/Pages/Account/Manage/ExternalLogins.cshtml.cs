@@ -37,14 +37,18 @@ namespace RazorPagesWebApplication.Pages.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
-        public async Task<IActionResult> OnGet(ManageMessageId? message = null)
+        public string StatusMessageClass => StatusMessage.IndexOf("error", StringComparison.OrdinalIgnoreCase) >= 0 ? "error" : "success";
+
+        public bool ShowStatusMessage => !string.IsNullOrEmpty((string)ViewData["StatusMessasge"]);
+
+        public async Task<IActionResult> OnGet(/*ManageMessageId? message = null*/)
         {
             // TODO: Replace all this with StatusMessage when TempData attribute works
-            ViewData["StatusMessage"] =
-                message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
-                : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
-                : message == ManageMessageId.Error ? "An error has occurred."
-                : "";
+            ViewData["StatusMessage"] = TempData["StatusMessage"];
+                //message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
+                //: message == ManageMessageId.AddLoginSuccess ? "The external login was added."
+                //: message == ManageMessageId.Error ? "An error has occurred."
+                //: "";
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -64,7 +68,8 @@ namespace RazorPagesWebApplication.Pages.Manage
         public async Task<IActionResult> OnPostRemoveLogin(string loginProvider, string providerKey)
         {
             StatusMessage = "An error has occurred.";
-            ManageMessageId? message = ManageMessageId.Error;
+            TempData["StatusMessage"] = "An error has occurred.";
+            //ManageMessageId? message = ManageMessageId.Error;
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user != null)
             {
@@ -72,11 +77,13 @@ namespace RazorPagesWebApplication.Pages.Manage
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    message = ManageMessageId.RemoveLoginSuccess;
+                    //message = ManageMessageId.RemoveLoginSuccess;
+                    TempData["StatusMessage"] = "The external login was removed.";
                 }
             }
             StatusMessage = "The external login was removed.";
-            return RedirectToPage(new { formaction = "", message });
+            TempData["StatusMessage"] = "The external login was removed.";
+            return RedirectToPage(new { formaction = ""/*, message*/ });
         }
 
         public async Task<IActionResult> OnPostLinkLogin(string provider)
@@ -101,19 +108,25 @@ namespace RazorPagesWebApplication.Pages.Manage
             var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
             if (info == null)
             {
-                return RedirectToPage(new { formaction = "", Message = ManageMessageId.Error });
+                StatusMessage = "An error has occurred.";
+                TempData["StatusMessage"] = "An error has occurred.";
+                return RedirectToPage(new { formaction = ""/*, Message = ManageMessageId.Error*/ });
             }
 
             var result = await _userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
             {
-                return RedirectToPage(new { formaction = "", Message = ManageMessageId.Error });
+                StatusMessage = "An error has occurred.";
+                TempData["StatusMessage"] = "An error has occurred.";
+                return RedirectToPage(new { formaction = ""/*, Message = ManageMessageId.Error*/ });
             }
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
-            
-            return RedirectToPage(new { formaction = "", Message = ManageMessageId.AddLoginSuccess });
+
+            StatusMessage = "The external login was added.";
+            TempData["StatusMessage"] = "The external login was added.";
+            return RedirectToPage(new { formaction = ""/*, Message = ManageMessageId.AddLoginSuccess*/ });
         }
     }
 }

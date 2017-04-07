@@ -67,8 +67,8 @@ namespace RazorPagesWebApplication.Pages.Manage
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User changed their password successfully.");
                     StatusMessage = "Your password has been changed.";
-                    //return Redirect($"~/Account/Manage/Index");
-                    return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.ChangePasswordSuccess });
+                    TempData["StatusMessage"] = "Your password has been changed.";
+                    return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.ChangePasswordSuccess }*/);
                 }
                 foreach (var error in result.Errors)
                 {
@@ -77,7 +77,9 @@ namespace RazorPagesWebApplication.Pages.Manage
                 return View();
             }
 
-            return RedirectToPage("/Account/Manage/Index", new { Message = ManageMessageId.Error });
+            StatusMessage = "An error has occurred.";
+            TempData["StatusMessage"] = "An error has occurred.";
+            return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.Error }*/);
         }
     }
 }
