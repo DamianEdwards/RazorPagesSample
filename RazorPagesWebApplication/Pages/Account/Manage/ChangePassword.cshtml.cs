@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using RazorPagesWebApplication.Data;
 
-namespace RazorPagesWebApplication.Pages.Manage
+namespace RazorPagesWebApplication.Pages.Account.Manage
 {
     public class ChangePasswordModel : PageModel
     {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace RazorPagesWebApplication.Pages.Manage
+namespace RazorPagesWebApplication.Pages.Account.Manage
 {
     //public enum ManageMessageId
     //{

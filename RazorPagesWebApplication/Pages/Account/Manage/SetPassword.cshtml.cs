@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using RazorPagesWebApplication.Data;
 
-namespace RazorPagesWebApplication.Pages.Manage
+namespace RazorPagesWebApplication.Pages.Account.Manage
 {
     public class SetPasswordModel : PageModel
     {
