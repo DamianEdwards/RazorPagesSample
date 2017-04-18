@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Data;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
@@ -43,12 +44,14 @@ namespace RazorPagesWebApplication.Pages.Account
 
         public string ReturnUrl { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         public async Task OnGet(string returnUrl = null)
         {
-            var errorMessage = (string)TempData["ErrorMessage"];
-            if (!string.IsNullOrEmpty(errorMessage))
+            if (!string.IsNullOrEmpty(ErrorMessage))
             {
-                ModelState.AddModelError(string.Empty, errorMessage);
+                ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
             // Clear the existing external cookie to ensure a clean login process

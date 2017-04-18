@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Data;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
@@ -41,6 +42,9 @@ namespace RazorPagesWebApplication.Pages.Account
 
         public string ReturnUrl { get; set; }
 
+        [TempData]
+        public string ErrorMessage { get; set; }
+
         public IActionResult OnGetAsync()
         {
             return RedirectToPage("/Account/Login");
@@ -58,8 +62,7 @@ namespace RazorPagesWebApplication.Pages.Account
         {
             if (remoteError != null)
             {
-                //ModelState.AddModelError(string.Empty, $"Error from external provider: {remoteError}");
-                TempData["ErrorMessage"] = $"Error from external provider: {remoteError}";
+                ErrorMessage = $"Error from external provider: {remoteError}";
                 return RedirectToPage("/Account/Login");
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();

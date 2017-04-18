@@ -74,9 +74,8 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    StatusMessage = "Your password has been set.";
-                    TempData["StatusMessage"] = "Your password has been set.";
-                    return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.SetPasswordSuccess }*/);
+                    StatusMessage = ManageMessages.SetPasswordSuccess;
+                    return RedirectToPage("/Account/Manage/Index");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -85,9 +84,8 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                 return View();
             }
 
-            StatusMessage = "An error has occurred.";
-            TempData["StatusMessage"] = "An error has occurred.";
-            return RedirectToPage("/Account/Manage/Index"/*, new { Message = ManageMessageId.Error }*/);
+            StatusMessage = ManageMessages.Error;
+            return RedirectToPage("/Account/Manage/Index");
         }
     }
 }
