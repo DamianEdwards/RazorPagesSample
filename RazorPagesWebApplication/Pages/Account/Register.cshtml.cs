@@ -82,7 +82,7 @@ namespace RazorPagesWebApplication.Pages.Account
                     _logger.LogInformation(3, "User created a new account with password.");
                     // BUG: Redirectig to the returnUrl is wrong here as the user isn't signed in until they verify their email address.
                     //      There should probably be a register confirmation page for cases when further verification has been requested.
-                    return RedirectToLocal(returnUrl);
+                    return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)
                 {
@@ -92,18 +92,6 @@ namespace RazorPagesWebApplication.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return View();
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
         }
     }
 }

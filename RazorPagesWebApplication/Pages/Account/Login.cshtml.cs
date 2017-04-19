@@ -73,7 +73,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)
                 {
@@ -93,18 +93,6 @@ namespace RazorPagesWebApplication.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return View();
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToPage("/Index");
-            }
         }
     }
 }
