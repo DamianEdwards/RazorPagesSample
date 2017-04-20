@@ -80,8 +80,12 @@ namespace RazorPagesWebApplication.Pages.Account
                         $"Please confirm your account by clicking this link: <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>link</a>");
                     //await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
-                    // BUG: Redirectig to the returnUrl is wrong here as the user isn't signed in until they verify their email address.
+                    // BUG: Redirecting to the returnUrl is wrong here as the user isn't signed in until they verify their email address.
                     //      There should probably be a register confirmation page for cases when further verification has been requested.
+                    if (string.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToPage("/Index");
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 foreach (var error in result.Errors)

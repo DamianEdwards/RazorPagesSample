@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Data;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Http.Authentication;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
@@ -24,7 +26,7 @@ namespace RazorPagesWebApplication.Pages.Account
             ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
-            _externalCookieScheme = identityCookieOptions.Value.ExternalCookieAuthenticationScheme;
+            _externalCookieScheme = identityCookieOptions.Value.ApplicationCookieAuthenticationScheme;
             _logger = logger;
         }
 
@@ -42,6 +44,8 @@ namespace RazorPagesWebApplication.Pages.Account
         [ModelBinder]
         public bool RememberMe { get; set; }
 
+        public IList<AuthenticationDescription> ExternalLogins { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [TempData]
@@ -55,7 +59,9 @@ namespace RazorPagesWebApplication.Pages.Account
             }
 
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            //await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+
+            //ExternalLogins = _signInManager.GetExternalAuthenticationSchemes().ToList();
 
             ReturnUrl = returnUrl;
         }
@@ -73,6 +79,10 @@ namespace RazorPagesWebApplication.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
+                    if (string.IsNullOrEmpty(returnUrl))
+                    {
+                        return RedirectToPage("/Index");
+                    }
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

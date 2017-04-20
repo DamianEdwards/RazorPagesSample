@@ -51,9 +51,9 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
-            OtherLogins = _signInManager.GetExternalAuthenticationSchemes()
-                .Where(auth => CurrentLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider))
-                .ToList();
+            //OtherLogins = _signInManager.GetExternalAuthenticationSchemes()
+            //    .Where(auth => CurrentLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider))
+            //    .ToList();
             ShowRemoveButton = user.PasswordHash != null || CurrentLogins.Count > 1;
             return View();
         }

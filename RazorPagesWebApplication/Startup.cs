@@ -13,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using RazorPagesWebApplication.Data;
 using RazorPagesWebApplication.Models;
 using RazorPagesWebApplication.Services;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace RazorPagesWebApplication
 {
@@ -47,6 +48,12 @@ namespace RazorPagesWebApplication
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddGoogleAuthentication(options =>
+            {
+                options.ClientId = Configuration["Authentication:Google:ClientId"];
+                options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+            });
 
             services.AddMvc(options =>
                 {
@@ -84,14 +91,7 @@ namespace RazorPagesWebApplication
 
             app.UseStaticFiles();
 
-            app.UseIdentity();
-
-            // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
-            app.UseGoogleAuthentication(new GoogleOptions
-            {
-                ClientId = Configuration["Authentication:Google:ClientId"],
-                ClientSecret = Configuration["Authentication:Google:ClientSecret"]
-            });
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
