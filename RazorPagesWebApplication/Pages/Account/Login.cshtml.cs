@@ -51,7 +51,7 @@ namespace RazorPagesWebApplication.Pages.Account
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public async Task OnGet(string returnUrl = null)
+        public /*async Task*/ void OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
