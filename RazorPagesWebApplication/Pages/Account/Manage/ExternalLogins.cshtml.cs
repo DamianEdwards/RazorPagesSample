@@ -41,7 +41,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
 
         public bool ShowStatusMessage => !string.IsNullOrEmpty(StatusMessage);
 
-        public async Task<IActionResult> OnGet()
+        public async Task<IActionResult> OnGetAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -58,7 +58,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             return View();
         }
 
-        public async Task<IActionResult> OnPostRemoveLogin(string loginProvider, string providerKey)
+        public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
         {
             StatusMessage = ManageMessages.Error;
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -74,7 +74,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostLinkLogin(string provider)
+        public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
         {
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
@@ -85,7 +85,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             return new ChallengeResult(provider, properties);
         }
 
-        public async Task<IActionResult> OnGetLinkLoginCallback()
+        public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             if (user == null)
