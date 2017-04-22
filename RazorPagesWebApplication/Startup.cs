@@ -5,41 +5,28 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using RazorPagesWebApplication.Data;
-using RazorPagesWebApplication.Models;
 using RazorPagesWebApplication.Services;
-using Microsoft.AspNetCore.Authentication.Google;
 
 namespace RazorPagesWebApplication
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
-
-            if (env.IsDevelopment())
-            {
-                // For more details on using the user secret store see https://go.microsoft.com/fwlink/?LinkID=532709
-                builder.AddUserSecrets<Startup>();
-            }
-
-            builder.AddEnvironmentVariables();
-            Configuration = builder.Build();
+            Configuration = configuration;
+            HostingEnvironment = env;
         }
 
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -56,30 +43,29 @@ namespace RazorPagesWebApplication
             });
 
             services.AddMvc(options =>
-                {
-                    options.SslPort = 44335;
-                    options.Filters.Add(new RequireHttpsAttribute());
-                })
-                .AddRazorPagesOptions(options =>
-                {
-                    options.RootDirectory = "/Pages";
-                    options.AuthorizeFolder("/Account/Manage/Index");
-                    options.AuthorizePage("/Account/Logout");
-                });
+            {
+                options.SslPort = 44335;
+                //options.Filters.Add(new RequireHttpsAttribute());
+            })
+            .AddRazorPagesOptions(options =>
+            {
+                options.RootDirectory = "/Pages";
+                options.AuthorizeFolder("/Account/Manage");
+                options.AuthorizePage("/Account/Logout");
+            });
 
             // Add application services.
             services.Configure<SendGridOptions>(Configuration.GetSection("SendGridOptions"));
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            return services.BuildServiceProvider(validateScopes: HostingEnvironment.IsDevelopment());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
-            if (env.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();

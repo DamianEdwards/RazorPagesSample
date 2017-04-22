@@ -76,11 +76,7 @@ namespace RazorPagesWebApplication.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation(5, "User logged in with {Name} provider.", info.LoginProvider);
-                if (string.IsNullOrEmpty(returnUrl))
-                {
-                    return RedirectToPage("/Index");
-                }
-                return LocalRedirect(returnUrl);
+                return LocalRedirect(Url.GetLocalUrl(returnUrl));
             }
             if (result.RequiresTwoFactor)
             {
@@ -119,11 +115,7 @@ namespace RazorPagesWebApplication.Pages.Account
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
                         _logger.LogInformation(6, "User created an account using {Name} provider.", info.LoginProvider);
-                        if (string.IsNullOrEmpty(returnUrl))
-                        {
-                            return RedirectToPage("/Index");
-                        }
-                        return LocalRedirect(returnUrl);
+                        return LocalRedirect(Url.GetLocalUrl(returnUrl));
                     }
                 }
                 foreach (var error in result.Errors)

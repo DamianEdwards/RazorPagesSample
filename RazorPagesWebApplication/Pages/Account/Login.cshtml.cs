@@ -79,11 +79,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    if (string.IsNullOrEmpty(returnUrl))
-                    {
-                        return RedirectToPage("/Index");
-                    }
-                    return LocalRedirect(returnUrl);
+                    return LocalRedirect(Url.GetLocalUrl(returnUrl));
                 }
                 if (result.RequiresTwoFactor)
                 {
