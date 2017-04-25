@@ -31,20 +31,20 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = "Current password")]
-        [ModelBinder]
+        [BindProperty]
         public string OldPassword { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "New password")]
-        [ModelBinder]
+        [BindProperty]
         public string NewPassword { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm new password")]
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
-        [ModelBinder]
+        [BindProperty]
         public string ConfirmPassword { get; set; }
 
         [TempData]
@@ -67,7 +67,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User changed their password successfully.");
                     StatusMessage = ManageMessages.ChangePasswordSuccess;
-                    return RedirectToPage("/Account/Manage/Index");
+                    return RedirectToPage("./Index");
                 }
                 foreach (var error in result.Errors)
                 {
@@ -77,7 +77,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             }
 
             StatusMessage = ManageMessages.Error;
-            return RedirectToPage("/Account/Manage/Index");
+            return RedirectToPage("./Index");
         }
     }
 }

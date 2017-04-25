@@ -26,13 +26,13 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-route-page="/Index" class="navbar-brand">RazorPagesWebApplication</a>
+                <a asp-page="/Index" class="navbar-brand">RazorPagesWebApplication</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-route-page="/Index">Home</a></li>
-                    <li><a asp-route-page="/About">About</a></li>
-                    <li><a asp-route-page="/Contact">Contact</a></li>
+                    <li><a asp-page="/Index">Home</a></li>
+                    <li><a asp-page="/About">About</a></li>
+                    <li><a asp-page="/Contact">Contact</a></li>
                 </ul>
                 @await Html.PartialAsync("_LoginPartial")
             </div>

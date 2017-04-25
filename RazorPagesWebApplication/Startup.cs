@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -45,7 +46,7 @@ namespace RazorPagesWebApplication
             services.AddMvc(options =>
             {
                 options.SslPort = 44335;
-                //options.Filters.Add(new RequireHttpsAttribute());
+                options.Filters.Add(new RequireHttpsAttribute());
             })
             .AddRazorPagesOptions(options =>
             {

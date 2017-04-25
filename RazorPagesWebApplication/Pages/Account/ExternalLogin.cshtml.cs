@@ -35,7 +35,7 @@ namespace RazorPagesWebApplication.Pages.Account
 
         [Required]
         [EmailAddress]
-        [ModelBinder]
+        [BindProperty]
         public string Email { get; set; }
 
         public string LoginProvider { get; set; }
@@ -47,13 +47,13 @@ namespace RazorPagesWebApplication.Pages.Account
 
         public IActionResult OnGetAsync()
         {
-            return RedirectToPage("/Account/Login");
+            return RedirectToPage("./Login");
         }
         
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Page("/Account/ExternalLogin", new { formaction = "Callback", returnUrl });
+            var redirectUrl = Url.Page("./ExternalLogin", new { handler = "Callback", returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return new ChallengeResult(provider, properties);
         }
@@ -63,12 +63,12 @@ namespace RazorPagesWebApplication.Pages.Account
             if (remoteError != null)
             {
                 ErrorMessage = $"Error from external provider: {remoteError}";
-                return RedirectToPage("/Account/Login");
+                return RedirectToPage("./Login");
             }
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
-                return RedirectToPage("/Account/Login");
+                return RedirectToPage("./Login");
             }
 
             // Sign in the user with this external login provider if the user already has a login.
@@ -80,11 +80,11 @@ namespace RazorPagesWebApplication.Pages.Account
             }
             if (result.RequiresTwoFactor)
             {
-                return RedirectToPage("/Account/SendCode", new { returnUrl });
+                return RedirectToPage("./SendCode", new { returnUrl });
             }
             if (result.IsLockedOut)
             {
-                return RedirectToPage("/Account/Lockout");
+                return RedirectToPage("./Lockout");
             }
             else
             {
@@ -104,7 +104,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 var info = await _signInManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
-                    return RedirectToPage("/Account/ExternalLoginFailure");
+                    return RedirectToPage("./ExternalLoginFailure");
                 }
                 var user = new ApplicationUser { UserName = Email, Email = Email };
                 var result = await _userManager.CreateAsync(user);

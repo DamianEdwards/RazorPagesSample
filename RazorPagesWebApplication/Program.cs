@@ -13,12 +13,17 @@ namespace RazorPagesWebApplication
     {
         public static void Main(string[] args)
         {
-            var host = WebHost.CreateDefaultBuilder(args)
+            var host = BuildWebHost(args);
+
+            host.Run();
+        }
+
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .ConfigureLogging(logging => logging.AddDebug())
                 .UseStartup<Startup>()
                 .Build();
-
-            host.Run();
         }
     }
 }

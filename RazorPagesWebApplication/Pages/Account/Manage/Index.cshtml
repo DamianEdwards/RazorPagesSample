@@ -20,16 +20,16 @@
         <dd>
             @if (Model.HasPassword)
             {
-                <a asp-route-page="/Account/Manage/ChangePassword" class="btn-bracketed">Change</a>
+                <a asp-page="./ChangePassword" class="btn-bracketed">Change</a>
             }
             else
             {
-                <a asp-route-page="/Account/Manage/SetPassword" class="btn-bracketed">Create</a>
+                <a asp-page="./SetPassword" class="btn-bracketed">Create</a>
             }
         </dd>
         <dt>External Logins:</dt>
         <dd>
-            @Model.Logins.Count <a asp-route-page="/Account/Manage/ExternalLogins" class="btn-bracketed">Manage</a>
+            @Model.Logins.Count <a asp-page="./ExternalLogins" class="btn-bracketed">Manage</a>
         </dd>
         <dt>Phone Number:</dt>
         <dd>
@@ -42,14 +42,14 @@
                 @if (Model.PhoneNumber != null)
                 {
                     <br />
-                    <a asp-route-page="/Account/Manage/AddPhoneNumber" class="btn-bracketed">Change</a>
-                    <form asp-route-formaction="RemovePhoneNumber" method="post">
+                    <a asp-page="AddPhoneNumber" class="btn-bracketed">Change</a>
+                    <form asp-route-handler="RemovePhoneNumber" method="post">
                         [<button type="submit" class="btn-link">Remove</button>]
                     </form>
                 }
                 else
                 {
-                    <a asp-route-page="/Account/Manage/AddPhoneNumber" class="btn-bracketed">Add</a>
+                    <a asp-page="AddPhoneNumber" class="btn-bracketed">Add</a>
                 }*@
         </dd>
 
@@ -61,13 +61,13 @@
             </p>
             @*@if (Model.TwoFactor)
                 {
-                    <form asp-route-formaction="DisableTwoFactorAuthentication" method="post" class="form-horizontal">
+                    <form asp-route-handler="DisableTwoFactorAuthentication" method="post" class="form-horizontal">
                         Enabled <button type="submit" class="btn-link btn-bracketed">Disable</button>
                     </form>
                 }
                 else
                 {
-                    <form asp-route-formaction="EnableTwoFactorAuthentication" method="post" class="form-horizontal">
+                    <form asp-route-handler="EnableTwoFactorAuthentication" method="post" class="form-horizontal">
                         <button type="submit" class="btn-link btn-bracketed">Enable</button> Disabled
                     </form>
                 }*@

@@ -1,16 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RazorPagesWebApplication.Data;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.Authentication;
 
 namespace RazorPagesWebApplication.Pages.Account
 {
@@ -32,16 +31,16 @@ namespace RazorPagesWebApplication.Pages.Account
 
         [Required]
         [EmailAddress]
-        [ModelBinder]
+        [BindProperty]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [ModelBinder]
+        [BindProperty]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
-        [ModelBinder]
+        [BindProperty]
         public bool RememberMe { get; set; }
 
         public IList<AuthenticationDescription> ExternalLogins { get; set; }
@@ -83,12 +82,12 @@ namespace RazorPagesWebApplication.Pages.Account
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    return RedirectToPage("/Account/SendCode", new { returnUrl, RememberMe });
+                    return RedirectToPage("./SendCode", new { returnUrl, RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
-                    return RedirectToPage("/Account/Lockout");
+                    return RedirectToPage("./Lockout");
                 }
                 else
                 {

@@ -21,22 +21,22 @@ namespace RazorPagesWebApplication.Pages.Account
 
         [Required]
         [EmailAddress]
-        [ModelBinder]
+        [BindProperty]
         public string Email { get; set; }
 
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
-        [ModelBinder]
+        [BindProperty]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        [ModelBinder]
+        [BindProperty]
         public string ConfirmPassword { get; set; }
 
-        [ModelBinder]
+        [BindProperty]
         public string Code { get; set; }
 
         public IActionResult OnGet(string code = null)
@@ -63,13 +63,13 @@ namespace RazorPagesWebApplication.Pages.Account
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToPage("/Account/ResetPasswordConfirmation");
+                return RedirectToPage("./ResetPasswordConfirmation");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Code, Password);
             if (result.Succeeded)
             {
-                return RedirectToPage("/Account/ResetPasswordConfirmation");
+                return RedirectToPage("./ResetPasswordConfirmation");
             }
 
             foreach (var error in result.Errors)

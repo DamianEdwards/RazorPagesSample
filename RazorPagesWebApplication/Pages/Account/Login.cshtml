@@ -1,6 +1,4 @@
 ﻿@page
-@using System.Collections.Generic
-@using Microsoft.AspNetCore.Http
 @model LoginModel
 
 @{
@@ -45,10 +43,10 @@
                     </div>
                 </div>
                 <p>
-                    <a asp-route-page="/Account/Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user?</a>
+                    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user?</a>
                 </p>
                 <p>
-                    <a asp-route-page="/Account/ForgotPassword">Forgot your password?</a>
+                    <a asp-page="./ForgotPassword">Forgot your password?</a>
                 </p>
             </form>
         </section>
@@ -69,7 +67,7 @@
                 }
                 else
                 {
-                    <form asp-route-page="/Account/ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <form asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
                         <div>
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
