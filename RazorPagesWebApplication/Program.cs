@@ -21,7 +21,6 @@ namespace RazorPagesWebApplication
         public static IWebHost BuildWebHost(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging(logging => logging.AddDebug())
                 .UseStartup<Startup>()
                 .Build();
         }

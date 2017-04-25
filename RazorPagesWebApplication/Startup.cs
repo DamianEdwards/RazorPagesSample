@@ -50,7 +50,6 @@ namespace RazorPagesWebApplication
             })
             .AddRazorPagesOptions(options =>
             {
-                options.RootDirectory = "/Pages";
                 options.AuthorizeFolder("/Account/Manage");
                 options.AuthorizePage("/Account/Logout");
             });

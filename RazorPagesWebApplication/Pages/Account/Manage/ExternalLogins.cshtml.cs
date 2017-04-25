@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -30,7 +30,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
 
         public IList<UserLoginInfo> CurrentLogins { get; set; }
 
-        public IList<AuthenticationDescription> OtherLogins { get; set; }
+        public IList<AuthenticationScheme> OtherLogins { get; set; }
 
         public bool ShowRemoveButton { get; set; }
 
@@ -51,9 +51,9 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             }
 
             CurrentLogins = await _userManager.GetLoginsAsync(user);
-            //OtherLogins = _signInManager.GetExternalAuthenticationSchemes()
-            //    .Where(auth => CurrentLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider))
-            //    .ToList();
+            OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+                .Where(auth => CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
+                .ToList();
             ShowRemoveButton = user.PasswordHash != null || CurrentLogins.Count > 1;
             return View();
         }
@@ -77,7 +77,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
         public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
         {
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.SignOutAsync(_externalCookieScheme);
 
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Page("./ExternalLogins", new { handler = "LinkLoginCallback" });
@@ -108,7 +108,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             }
 
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.SignOutAsync(_externalCookieScheme);
 
             StatusMessage = ManageMessages.AddLoginSuccess;
             return RedirectToPage();

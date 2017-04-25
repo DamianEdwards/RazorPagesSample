@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -43,14 +44,14 @@ namespace RazorPagesWebApplication.Pages.Account
         [BindProperty]
         public bool RememberMe { get; set; }
 
-        public IList<AuthenticationDescription> ExternalLogins { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
         public string ReturnUrl { get; set; }
 
         [TempData]
         public string ErrorMessage { get; set; }
 
-        public /*async Task*/ void OnGetAsync(string returnUrl = null)
+        public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
@@ -58,9 +59,9 @@ namespace RazorPagesWebApplication.Pages.Account
             }
 
             // Clear the existing external cookie to ensure a clean login process
-            //await HttpContext.Authentication.SignOutAsync(_externalCookieScheme);
+            await HttpContext.SignOutAsync(_externalCookieScheme);
 
-            //ExternalLogins = _signInManager.GetExternalAuthenticationSchemes().ToList();
+            ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
         }
