@@ -48,7 +48,7 @@ namespace RazorPagesWebApplication.Pages.Account
             else
             {
                 Code = code;
-                return View();
+                return Page();
             }
         }
 
@@ -56,7 +56,7 @@ namespace RazorPagesWebApplication.Pages.Account
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             var user = await _userManager.FindByEmailAsync(Email);
@@ -76,7 +76,7 @@ namespace RazorPagesWebApplication.Pages.Account
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return View();
+            return Page();
         }
     }
 }

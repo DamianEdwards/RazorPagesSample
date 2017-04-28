@@ -54,7 +54,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
             Logins = await _userManager.GetLoginsAsync(user);
             BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
 
-            return View();
+            return Page();
         }
     }
 }

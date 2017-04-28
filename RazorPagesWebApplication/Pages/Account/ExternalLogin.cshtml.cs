@@ -92,7 +92,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 ReturnUrl = returnUrl;
                 LoginProvider = info.LoginProvider;
                 Email = info.Principal.FindFirstValue(ClaimTypes.Email);
-                return View();
+                return Page();
             }
         }
 
@@ -125,7 +125,7 @@ namespace RazorPagesWebApplication.Pages.Account
             }
 
             ReturnUrl = returnUrl;
-            return View();
+            return Page();
         }
     }
 }

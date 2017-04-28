@@ -33,14 +33,14 @@ namespace RazorPagesSample.Pages.Customers.SeparatePageModels
                 return RedirectToPage("./Index");
             }
 
-            return View();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             _db.Attach(Customer).State = EntityState.Modified;

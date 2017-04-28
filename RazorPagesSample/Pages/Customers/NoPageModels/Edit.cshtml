@@ -13,14 +13,14 @@
             return Redirect("~/customers/nopagemodels/");
         }
 
-        return View();
+        return Page();
     }
 
     public async Task<IActionResult> OnPostAsync(Customer customer)
     {
         if (!ModelState.IsValid)
         {
-            return View();
+            return Page();
         }
 
         Db.Attach(customer).State = EntityState.Modified;

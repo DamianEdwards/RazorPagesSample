@@ -26,7 +26,7 @@ namespace RazorPagesSample.Pages.Customers.SeparatePageModels
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             _db.Customers.Add(Customer);

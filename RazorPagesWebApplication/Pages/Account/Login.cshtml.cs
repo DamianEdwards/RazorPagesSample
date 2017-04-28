@@ -93,12 +93,12 @@ namespace RazorPagesWebApplication.Pages.Account
                 else
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return View();
+                    return Page();
                 }
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return Page();
         }
     }
 }

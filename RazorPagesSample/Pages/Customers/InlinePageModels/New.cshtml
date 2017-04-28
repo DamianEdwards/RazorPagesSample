@@ -22,7 +22,7 @@
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             _db.Customers.Add(Customer);

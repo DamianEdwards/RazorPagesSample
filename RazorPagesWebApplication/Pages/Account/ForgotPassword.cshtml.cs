@@ -49,7 +49,7 @@ namespace RazorPagesWebApplication.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
-            return View();
+            return Page();
         }
     }
 }

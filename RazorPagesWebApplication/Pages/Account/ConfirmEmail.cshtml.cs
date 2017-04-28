@@ -37,7 +37,7 @@ namespace RazorPagesWebApplication.Pages.Account
                 return RedirectToPage("/Error");
             }
 
-            return View();
+            return Page();
         }
     }
 }

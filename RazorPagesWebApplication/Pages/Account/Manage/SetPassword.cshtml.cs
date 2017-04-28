@@ -57,14 +57,14 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                 return RedirectToPage("./ChangePassword");
             }
 
-            return View();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -81,7 +81,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View();
+                return Page();
             }
 
             StatusMessage = ManageMessages.Error;

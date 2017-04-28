@@ -54,7 +54,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
         {
             if (!ModelState.IsValid)
             {
-                return View();
+                return Page();
             }
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
@@ -73,7 +73,7 @@ namespace RazorPagesWebApplication.Pages.Account.Manage
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                return View();
+                return Page();
             }
 
             StatusMessage = ManageMessages.Error;
