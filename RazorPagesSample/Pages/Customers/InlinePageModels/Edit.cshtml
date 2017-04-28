@@ -12,42 +12,46 @@
             _db = db;
         }
 
+        [TempData]
+        public string Message { get; set; }
+
+        [BindProperty]
+        public Customer Customer { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
             Customer = await _db.Customers.FindAsync(id);
 
             if (Customer == null)
             {
-                TempData["Message"] = $"Customer {id} not found!";
-                return Redirect("~/customers/inlinepagemodels/");
+                Message = $"Customer {id} not found!";
+                return RedirectToPage("./Index");
             }
 
             return View();
         }
 
-        public async Task<IActionResult> OnPostAsync(Customer customer)
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            _db.Attach(customer).State = EntityState.Modified;
+            _db.Attach(Customer).State = EntityState.Modified;
 
             try
             {
                 await _db.SaveChangesAsync();
-                TempData["Message"] = "Customer updated successfully!";
+                Message = "Customer updated successfully!";
             }
             catch (DbUpdateConcurrencyException)
             {
-                TempData["Message"] = $"Customer {customer.Id} not found!";
+                Message = $"Customer {Customer.Id} not found!";
             }
 
-            return Redirect("~/customers/inlinepagemodels/");
+            return RedirectToPage("./Index");
         }
-
-        public Customer Customer { get; private set; }
     }
 }
 
@@ -56,7 +60,7 @@
 }
 
 <h1>Edit Customer - @Model.Customer.Id</h1>
-<form method="post" class="form-horizontal" asp-antiforgery="true">
+<form method="post" class="form-horizontal">
     <div asp-validation-summary="All" class="text-danger"></div>
     <input asp-for="Customer.Id" type="hidden" />
     <div class="form-group">
@@ -74,5 +78,5 @@
 </form>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
-    }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}
