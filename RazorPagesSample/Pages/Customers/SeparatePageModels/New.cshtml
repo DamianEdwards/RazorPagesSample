@@ -1,14 +1,13 @@
-﻿@page "{id:int}"
-@model EditCustomerPageModel
+﻿@page
+@model NewModel
 
 @{
-    ViewData["Title"] = "Edit Customer";
+    ViewData["Title"] = "New Customer";
 }
 
-<h1>Edit Customer - @Model.Customer.Id</h1>
+<h1>New Customer</h1>
 <form method="post" class="form-horizontal" asp-antiforgery="true">
     <div asp-validation-summary="All" class="text-danger"></div>
-    <input asp-for="Customer.Id" type="hidden" />
     <div class="form-group">
         <label asp-for="Customer.Name" class="col-md-2 control-label"></label>
         <div class="col-md-10">
@@ -24,5 +23,5 @@
 </form>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

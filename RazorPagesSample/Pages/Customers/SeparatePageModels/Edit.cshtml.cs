@@ -2,18 +2,26 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using RazorPagesSample.Data;
 
-namespace RazorPages.Customers
+namespace RazorPagesSample.Pages.Customers.SeparatePageModels
 {
-    public class EditCustomerPageModel : PageModel
+    public class EditModel : PageModel
     {
         private readonly AppDbContext _db;
 
-        public EditCustomerPageModel(AppDbContext db)
+        public EditModel(AppDbContext db)
         {
             _db = db;
         }
+
+        [TempData]
+        public string Message { get; set; }
+
+        [BindProperty]
+        public Customer Customer { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -21,35 +29,33 @@ namespace RazorPages.Customers
 
             if (Customer == null)
             {
-                TempData[nameof(CustomersPageModel.Message)] = $"Customer {id} not found!";
-                return Redirect("~/customers/separatepagemodels/");
+                Message = $"Customer {id} not found!";
+                return RedirectToPage("./Index");
             }
 
             return View();
         }
 
-        public async Task<IActionResult> OnPostAsync(Customer customer)
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
                 return View();
             }
 
-            _db.Attach(customer).State = EntityState.Modified;
+            _db.Attach(Customer).State = EntityState.Modified;
 
             try
             {
                 await _db.SaveChangesAsync();
-                TempData[nameof(CustomersPageModel.Message)] = "Customer updated successfully!";
+                Message = "Customer updated successfully!";
             }
             catch (DbUpdateConcurrencyException)
             {
-                TempData[nameof(CustomersPageModel.Message)] = $"Customer {customer.Id} not found!";
+                Message = $"Customer {Customer.Id} not found!";
             }
 
-            return Redirect("~/customers/separatepagemodels/");
+            return RedirectToPage("./Index");
         }
-
-        public Customer Customer { get; private set; }
     }
 }

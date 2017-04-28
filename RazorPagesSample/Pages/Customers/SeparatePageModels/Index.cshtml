@@ -1,6 +1,6 @@
-﻿@page "{formaction?}/{id:int?}"
+﻿@page "{handler?}/{id:int?}"
 
-@model CustomersPageModel
+@model IndexModel
 
 @{
     ViewData["Title"] = "Customers";
@@ -13,12 +13,12 @@
         @Model.Message
     </div>
 </p>
-<form method="post" asp-antiforgery="true">
+<form method="post">
     <table class="table">
         <thead>
             <tr>
-                <th>@Html.DisplayNameFor(m => m.Customer.Id)</th>
-                <th>@Html.DisplayNameFor(m => m.Customer.Name)</th>
+                <th>@Html.DisplayNameFor(m => m.Customers[0].Id)</th>
+                <th>@Html.DisplayNameFor(m => m.Customers[0].Name)</th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -32,13 +32,13 @@
                     <td>@Html.DisplayFor(_ => customer.Id)</td>
                     <td>@Html.DisplayFor(_ => customer.Name)</td>
                     <td>
-                        <a href="edit/@customer.Id" class="btn btn-xs btn-primary">edit</a>
-                        <button type="submit" formaction="delete/@customer.Id" class="btn btn-xs btn-danger">delete</button>
+                        <a asp-page="./Edit" asp-route-id="@customer.Id" class="btn btn-xs btn-primary">edit</a>
+                        <button type="submit" asp-page-handler="delete" asp-route-id="@customer.Id" class="btn btn-xs btn-danger">delete</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a href="new" class="btn btn-sm btn-success">Create</a>
+    <a asp-page="./New" class="btn btn-sm btn-success">Create</a>
 </form>
