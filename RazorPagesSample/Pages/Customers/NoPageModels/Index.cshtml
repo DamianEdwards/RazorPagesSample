@@ -3,6 +3,13 @@
 @inject AppDbContext Db
 
 @functions {
+    public IList<Customer> Customers { get; private set; }
+
+    [TempData]
+    public string Message { get; set; }
+
+    public bool ShowMessage => !string.IsNullOrEmpty(Message);
+
     public async Task<IActionResult> OnGetAsync()
     {
         Customers = await Db.Customers.AsNoTracking().ToListAsync();
@@ -24,13 +31,6 @@
 
         return RedirectToPage();
     }
-
-    public IList<Customer> Customers { get; private set; }
-
-    [TempData]
-    public string Message { get; set; }
-
-    public bool ShowMessage => !string.IsNullOrEmpty(Message);
 }
 
 @{
