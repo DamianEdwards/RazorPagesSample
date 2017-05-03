@@ -6,7 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\Customers\Scripted\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
   <ItemGroup>
