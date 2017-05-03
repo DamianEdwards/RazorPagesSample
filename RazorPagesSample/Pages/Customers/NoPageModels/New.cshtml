@@ -3,22 +3,26 @@
 @inject AppDbContext Db
 
 @functions {
-    public async Task<IActionResult> OnPostAsync(Customer customer)
+    [BindProperty]
+    public Customer Customer { get; set; }
+
+    [TempData]
+    public string Message { get; set; }
+
+    public async Task<IActionResult> OnPostAsync()
     {
         if (!ModelState.IsValid)
         {
-            return View();
+            return Page();
         }
 
-        Db.Customers.Add(customer);
+        Db.Customers.Add(Customer);
         await Db.SaveChangesAsync();
 
-        TempData["Message"] = "New customer created successfully!";
+        Message = "New customer created successfully!";
 
-        return Redirect("~/customers/nopagemodels/");
+        return RedirectToPage("./Index");
     }
-
-    public Customer Customer { get; }
 }
 
 @{
@@ -26,7 +30,7 @@
 }
 
 <h1>New Customer</h1>
-<form method="post" class="form-horizontal" asp-antiforgery="true">
+<form method="post" class="form-horizontal">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
         <label asp-for="Customer.Name" class="col-md-2 control-label"></label>
@@ -43,5 +47,5 @@
 </form>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("~/_ValidationScriptsPartial.cshtml"); }
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

@@ -1,14 +1,13 @@
-﻿@page "{formaction?}/{id:int?}"
+﻿@page "{handler?}/{id:int?}"
 
 @inject AppDbContext Db
 
 @functions {
     public async Task<IActionResult> OnGetAsync()
     {
-        Message = TempData["Message"]?.ToString();
         Customers = await Db.Customers.AsNoTracking().ToListAsync();
 
-        return View();
+        return Page();
     }
 
     public async Task<IActionResult> OnPostDeleteAsync(int id)
@@ -21,13 +20,10 @@
             await Db.SaveChangesAsync();
         }
 
-        TempData["Message"] = $"Customer {id} deleted successfully";
-        //Message = $"Customer {id} deleted successfully";
+        Message = $"Customer {id} deleted successfully";
 
-        return Redirect("~/customers/nopagemodels/");
+        return RedirectToPage();
     }
-
-    public Customer Customer { get; }
 
     public IList<Customer> Customers { get; private set; }
 
@@ -48,12 +44,12 @@
         @Message
     </div>
 </p>
-<form method="post" asp-antiforgery="true">
+<form method="post">
     <table class="table">
         <thead>
             <tr>
-                <th asp-display-name-for="Customer.Id"></th>
-                <th asp-display-name-for="Customer.Name"></th>
+                <th asp-display-name-for="Customers[0].Id"></th>
+                <th asp-display-name-for="Customers[0].Name"></th>
                 <th>&nbsp;</th>
             </tr>
         </thead>
@@ -67,13 +63,13 @@
                     <td asp-display-for="@customer.Id"></td>
                     <td asp-display-for="@customer.Name"></td>
                     <td>
-                        <a href="edit/@customer.Id" class="btn btn-xs btn-primary">edit</a>
-                        <button type="submit" formaction="delete/@customer.Id" class="btn btn-xs btn-danger">delete</button>
+                        <a asp-page="./Edit" asp-route-id="@customer.Id" class="btn btn-xs btn-primary">edit</a>
+                        <button type="submit" asp-page-handler="delete" asp-route-id="@customer.Id" class="btn btn-xs btn-danger">delete</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a href="new" class="btn btn-sm btn-success">Create</a>
+    <a asp-page="./New" class="btn btn-sm btn-success">Create</a>
 </form>
